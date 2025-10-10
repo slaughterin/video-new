@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>river</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #111;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    video {
+      width: 80%;
+      max-width: 800px;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+      margin-bottom: 40px;
+    }
+
+    .message-link {
+      font-size: 2rem;
+      color: red;
+      text-decoration: underline;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    /* Message page styling */
+    #messagePage {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background-color: #222;
+      width: 100%;
+      min-height: 100vh;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    #messagePage input, #messagePage textarea, #messagePage button {
+      margin: 10px 0;
+      padding: 10px;
+      font-size: 1rem;
+      border-radius: 6px;
+      border: none;
+      width: 80%;
+      max-width: 500px;
+      box-sizing: border-box;
+    }
+
+    #messages {
+      margin-top: 20px;
+      width: 80%;
+      max-width: 600px;
+      background-color: #333;
+      padding: 10px;
+      border-radius: 8px;
+      overflow-y: auto;
+      max-height: 300px;
+    }
+
+    .message {
+      background-color: #444;
+      margin: 5px 0;
+      padding: 8px;
+      border-radius: 5px;
+      word-wrap: break-word;
+    }
+
+    .message strong {
+      font-weight: bold;
+    }
+
+    button {
+      background-color: #ff6347;
+      color: white;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #e5533d;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Main Page -->
+  <div id="mainPage">
+    <video controls autoplay muted loop>
+      <source src="lowlife.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+    <div class="message-link" onclick="showMessagePage()">Should I make a Pastebin type of website?</div>
+  </div>
+
+  <!-- Message Page -->
+  <div id="messagePage">
+    <h2>Leave a message</h2>
+    <input type="text" id="name" placeholder="Your name (default: John Doe)" />
+    <textarea id="message" placeholder="Type your message here..."></textarea>
+    <button onclick="addMessage()">Submit</button>
+    <div id="messages"></div>
+    <button onclick="backToMain()">Back</button>
+  </div>
+
+  <script>
+    const userColors = {};
+
+    function getRandomColor() {
+      const letters = '0123456789ABCDEF';
+      let color = '#';
+      for (let i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+      }
+      return color;
+    }
+
+    function showMessagePage() {
+      document.getElementById('mainPage').style.display = 'none';
+      document.getElementById('messagePage').style.display = 'flex';
+    }
+
+    function backToMain() {
+      document.getElementById('mainPage').style.display = 'flex';
+      document.getElementById('messagePage').style.display = 'none';
+    }
+
+    function addMessage() {
+      const nameInput = document.getElementById('name');
+      const messageInput = document.getElementById('message');
+      const name = nameInput.value.trim() || "John Doe";
+      const message = messageInput.value.trim();
+
+      if (message === "") return;
+
+      // Assign a unique color to the user if not already assigned
+      if (!userColors[name]) {
+        userColors[name] = getRandomColor();
+      }
+
+      const messageDiv = document.createElement('div');
+      messageDiv.className = 'message';
+      messageDiv.innerHTML = `<strong style="color:${userColors[name]}">${name}:</strong> ${message}`;
+
+      document.getElementById('messages').appendChild(messageDiv);
+
+      messageInput.value = '';
+      nameInput.value = '';
+    }
+  </script>
+
+</body>
+</html>
